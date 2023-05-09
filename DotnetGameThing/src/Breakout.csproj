@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ApplicationIcon>assets\icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Raylib-cs" Version="4.5.0" />
+  </ItemGroup>
+	
+	<ItemGroup>
+        <Content Include="assets\*.*">
+            <CopyToOutputDirectory>always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="assets\lose.wav" />
+	  <None Remove="assets\select.wav" />
+	</ItemGroup>
+
+</Project>

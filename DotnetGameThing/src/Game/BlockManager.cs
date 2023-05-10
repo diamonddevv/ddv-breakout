@@ -93,8 +93,8 @@ namespace Breakout.Game
 
         public Block GetRandomBlock(int i, BlockState state, int row, int column, int x, int y, int height, int width, Color color)
         {
-            if (RangeRoll(i, 20, 0)) return new BallBlock(state, row, column, x, y, height, width);
-            else if (RangeRoll(i, 10, 20) && (bool)Settings.settingsSSKVPF.GetObject(Settings.KEY_USEEMPTY)) return new Block(Block.BlockState.Empty, row, column, x, y, height, width, color);
+            if (RangeRoll(i, 20, 0) && (bool)Settings.GetValue(Settings.KEY_USEBALLBLOCK)) return new BallBlock(state, row, column, x, y, height, width);
+            else if (RangeRoll(i, 10, 20) && (bool)Settings.GetValue(Settings.KEY_USEEMPTY)) return new Block(Block.BlockState.Empty, row, column, x, y, height, width, color);
             else return new Block(state, row, column, x, y, height, width, color);
         }
 

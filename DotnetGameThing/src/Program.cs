@@ -37,6 +37,10 @@ namespace BreakoutGame
             HighScoreManager.highscoresSave.read();
 
             Settings.Default();
+            Settings.ForEachSetting(s =>
+            {
+                Settings.settingsSSKVPF.dict.Add(s.key, new SSKVPFManager.SerializableObj(s.defaultValue, s.serialize, s.deserialize));
+            });
             Settings.settingsSSKVPF.read();
             Settings.settingsSSKVPF.write();
 

@@ -124,11 +124,12 @@ namespace Breakout.Util
 
         public void read()
         {
+            StreamReader reader = new StreamReader(filename);
             try
             {
                 if (!PrepareFileManagement(filename))
                 {
-                    StreamReader reader = new StreamReader(filename);
+                    
                     if (reader.EndOfStream)
                     {
                         throw new Exception("File was Empty!");
@@ -146,7 +147,7 @@ namespace Breakout.Util
                         }
                     }
 
-                    reader.Close();
+                    
                 }
                 else RevertAll();
             }
@@ -154,6 +155,9 @@ namespace Breakout.Util
             {
                 Console.WriteLine($"Exception whilst reading {filename}: {ex.Message}");
                 RevertAll();
+            } finally
+            {
+                reader.Close();
             }
         }
 
@@ -169,7 +173,7 @@ namespace Breakout.Util
         {
 
             string[] parts = filename.Split('\\');
-            if (parts.Length < 1)
+            if (parts.Length > 1)
             {
                 int l = parts.Length;
                 if (!Directory.Exists(parts[l - 2]))

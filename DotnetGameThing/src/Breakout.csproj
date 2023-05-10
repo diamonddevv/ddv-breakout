@@ -17,10 +17,5 @@
             <CopyToOutputDirectory>always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-	
-	<ItemGroup>
-	  <None Remove="assets\lose.wav" />
-	  <None Remove="assets\select.wav" />
-	</ItemGroup>
 
 </Project>

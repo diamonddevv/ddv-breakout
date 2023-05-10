@@ -21,7 +21,7 @@ namespace Breakout.Game
             Random r = new Random();
 
             (int x, int y) sp = (pos.x + (BlockManager.blockWidth / 2), pos.y + (BlockManager.blockHeight / 2));
-            Ball ball = new Ball(sp.x, sp.y, new Vector2(0, 3), false);
+            Ball ball = new Ball(sp.x, sp.y, new Vector2(0, 5), false);
             ballManager.queue.Add(ball);
         }
 

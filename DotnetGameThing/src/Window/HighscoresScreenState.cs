@@ -20,7 +20,7 @@ namespace Breakout.Window
         public override void Init()
         {
             HighScoreManager.Fetch();
-            //HighScoreManager.sort();
+            HighScoreManager.Sort();
 
             BUTTON_BACK = new Button(20, 20, 128, 96, "Back", 25, () =>
             {
@@ -36,10 +36,23 @@ namespace Breakout.Window
             int x = 20;
             int i = 1;
 
-            foreach (var score in HighScoreManager.cachedHighscores)
+            if (HighScoreManager.cachedHighscores.Count <= 0)
             {
-                Raylib.DrawText($"{i}) Score: {score}", x, starty + (25 * i), 25, Color.BLACK);
-                i++;
+                Raylib.DrawText($"No scores yet! Play a bit first.", x, starty, 25, Color.BLACK);
+                if (HighScoreManager.highscoresSave.ReadWasCorrupted())
+                {
+                    Raylib.DrawText($"The scores previously stored were corrupted, \nor the file format was changed. They are irretrievable.", x, starty + 30, 25, Color.BLACK);
+                }
+            } else
+            {
+                foreach (var scoring in HighScoreManager.cachedHighscores)
+                {
+                    int y = starty + (25 * i);
+                    int m = $"{i})".Length;
+                    Raylib.DrawText($"{i})", x, y, 25, Color.BLACK);
+                    Raylib.DrawText($"{scoring.user}: {scoring.score} Points", x + m + 30, y, 25, Color.BLACK);
+                    i++;
+                }
             }
 
             BUTTON_BACK.Tick();

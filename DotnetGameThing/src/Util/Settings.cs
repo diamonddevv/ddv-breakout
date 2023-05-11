@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static Breakout.Util.SSKVPFManager;
 using static Breakout.Window.SettingsState;
 
 namespace Breakout.Util
@@ -51,10 +52,12 @@ namespace Breakout.Util
 
         public static object GetValue(string key)
         {
-            if (settingsSSKVPF.dict.TryGetValue(key, out var obj))
+            object? o = settingsSSKVPF.GetObject(key);
+            if (o == null)
             {
-                return obj.val;
-            } return null;
+                return null;
+            }
+            return o;
         }
 
         public class SettingWrapper
@@ -65,18 +68,24 @@ namespace Breakout.Util
             public SettingType type;
             public Func<object, string> serialize;
             public Func<string, object> deserialize;
-            public string text;
+            public SerializableObj obj;
 
             public SettingWrapper(string key, object defaultValue, (int x, int y) position, SettingType type, string text, (Func<object, string> serialize, Func<string, object> deserialize) serial)
             {
                 this.key = key;
                 this.type = type;
+                this.defaultValue = defaultValue;
                 this.serialize = serial.serialize;
                 this.deserialize = serial.deserialize;
 
+                object? o = settingsSSKVPF.GetObject(key);
+
                 type.text = text;
-                type.setting = defaultValue;
+                type.settingKey = key;
+                type.setting = o == null ? defaultValue : o;
                 type.pos = position;
+
+                obj = new SerializableObj(type.setting, serialize, deserialize);
             }
 
             public void Write()
@@ -87,6 +96,11 @@ namespace Breakout.Util
             public void Tick()
             {
                 type.Tick();
+            }
+
+            public void Init()
+            {
+                type.Initialize();
             }
         }
 

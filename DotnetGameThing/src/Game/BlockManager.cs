@@ -81,11 +81,14 @@ namespace Breakout.Game
         {
             foreach (var block in blocks)
             {
-                if (block.state == Block.BlockState.Present)
+                if (block != null)
                 {
-                    Raylib.DrawRectangle(block.pos.x, block.pos.y, block.dims.width, block.dims.height, block.color);
-                    block.DrawOverlayedTexture();
-                    if (debug) if (block.boundingBox != null) block.boundingBox.DrawBoundingBox();
+                    if (block.state == Block.BlockState.Present)
+                    {
+                        Raylib.DrawRectangle(block.pos.x, block.pos.y, block.dims.width, block.dims.height, block.color);
+                        block.DrawOverlayedTexture();
+                        if (debug) if (block.boundingBox != null) block.boundingBox.DrawBoundingBox();
+                    }
                 }
             }
         }

@@ -15,6 +15,9 @@ namespace Breakout.Resource
         public static Texture2D SPECIAL_BLOCK_OVERLAY;
         public static Texture2D ATLAS_BOOLEAN;
         public static Texture2D ATLAS_INT;
+        public static Texture2D ATLAS_DECOR;
+        public static Texture2D MENU_GRADIENT_MAP;
+        public static Texture2D PAUSE_OVERLAY;
 
         // Sound
         public static Sound BOUNCE;
@@ -32,6 +35,9 @@ namespace Breakout.Resource
             SPECIAL_BLOCK_OVERLAY = Raylib.LoadTexture("assets/special_block_overlay.png");
             ATLAS_BOOLEAN =         Raylib.LoadTexture("assets/boolean.png");
             ATLAS_INT =             Raylib.LoadTexture("assets/int.png");
+            ATLAS_DECOR =           Raylib.LoadTexture("assets/decoration_atlas.png");
+            MENU_GRADIENT_MAP =     Raylib.LoadTexture("assets/menu_gradient_map.png");
+            PAUSE_OVERLAY =         Raylib.LoadTexture("assets/pause_overlay.png");
 
             // Sound
             BOUNCE =                Raylib.LoadSound("assets/bounce.wav");
@@ -46,6 +52,11 @@ namespace Breakout.Resource
             // Texture
             Raylib.UnloadTexture(DDV_ICON);
             Raylib.UnloadTexture(SPECIAL_BLOCK_OVERLAY);
+            Raylib.UnloadTexture(ATLAS_BOOLEAN);
+            Raylib.UnloadTexture(ATLAS_INT);
+            Raylib.UnloadTexture(ATLAS_DECOR);
+            Raylib.UnloadTexture(MENU_GRADIENT_MAP);
+            Raylib.UnloadTexture(PAUSE_OVERLAY);
 
             // Sound
             Raylib.UnloadSound(BOUNCE);

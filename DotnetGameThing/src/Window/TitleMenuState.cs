@@ -1,4 +1,5 @@
-﻿using Breakout.Resource;
+﻿using Breakout.Decor;
+using Breakout.Resource;
 using BreakoutGame;
 using Raylib_cs;
 using System;
@@ -46,11 +47,13 @@ namespace Breakout.Window
             {
                 Program.Quit(1);
             });
+
         }
 
         public override void UpdateWindow()
         {
             Raylib.ClearBackground(Color.SKYBLUE);
+            DrawMenuGradient();
 
             int logoX = Program.width / 2;
             int logoY = Program.height / 32;
@@ -61,6 +64,7 @@ namespace Breakout.Window
             BUTTON_SETTINGS.Tick();
             BUTTON_HIGHSCORES.Tick();
             BUTTON_QUIT.Tick();
+
         }
     }
 }

@@ -31,11 +31,13 @@ namespace Breakout.Window
         public override void UpdateWindow()
         {
             Raylib.ClearBackground(Color.SKYBLUE);
+            DrawMenuGradient();
 
             int starty = 40 + 96;
             int x = 20;
             int i = 1;
 
+            
             if (HighScoreManager.cachedHighscores.Count <= 0)
             {
                 Raylib.DrawText($"No scores yet! Play a bit first.", x, starty, 25, Color.BLACK);

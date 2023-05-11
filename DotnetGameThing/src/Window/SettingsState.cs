@@ -19,11 +19,22 @@ namespace Breakout.Window
 
         private static Button BUTTON_BACK;
 
+        private static int longestSettingText = 0;
+
+        public static void CheckLength(int m)
+        {
+            if (m > longestSettingText)
+            {
+                longestSettingText = m;
+            }
+        }
+
         public override void Init()
         {
             Settings.settingsSSKVPF.read();
+            Settings.ForEachSetting(x => { x.Init(); });
 
-            BUTTON_BACK = new Button(20, 20, 128, 96, "Save & Exit", 18, () =>
+            BUTTON_BACK = new Button(20, 10, 128, 96, "Save & Exit", 18, () =>
             {
                 Settings.ForEachSetting(s => s.Write());
                 Settings.settingsSSKVPF.write();
@@ -34,8 +45,11 @@ namespace Breakout.Window
         public override void UpdateWindow()
         {
             Raylib.ClearBackground(Color.SKYBLUE);
+            DrawMenuGradient();
+
             BUTTON_BACK.Tick();
 
+            Raylib.DrawRectangleRounded(new Rectangle(8, 111, longestSettingText + 100, (Settings.wrapperMap.Count * 30) + 10), 0.5f, 10, Color.WHITE);
             Settings.ForEachSetting(s => s.Tick());
         }
 
@@ -43,6 +57,7 @@ namespace Breakout.Window
         {
             public (int x, int y) pos;
             public string text;
+            public string settingKey;
             public object setting;
 
             public SettingType()
@@ -51,6 +66,12 @@ namespace Breakout.Window
 
             public abstract void Poll();
             public abstract void Draw();
+
+            public void Initialize()
+            {
+                this.setting = Settings.GetValue(settingKey);
+            }
+
             public void Tick()
             {
                 Poll(); Draw();
@@ -75,7 +96,8 @@ namespace Breakout.Window
                 {
                     if (Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
                     {
-                        setting = !((bool) setting);
+                        Raylib.PlaySound(ResourceManager.SELECT_MENU);
+                        setting = !(bool) setting;
                     }
                 }
             }
@@ -83,8 +105,9 @@ namespace Breakout.Window
             public override void Draw()
             {
                 int m = Raylib.MeasureText(text, 20);
+                CheckLength(m);
                 Raylib.DrawText(text, pos.x, pos.y, 20, Color.BLACK);
-                var drawPos = new Vector2(pos.x + m + 5, pos.y - 10);
+                var drawPos = new Vector2(pos.x + m + 5, pos.y - 8);
                 Raylib.DrawTextureRec(ResourceManager.ATLAS_BOOLEAN, frame, drawPos, Color.WHITE);
                 Raylib.DrawTextureRec(ResourceManager.ATLAS_BOOLEAN, overlay, drawPos, (bool)setting ? Color.GREEN : Color.RED);
             }
@@ -109,6 +132,7 @@ namespace Breakout.Window
             public override void Draw()
             {
                 int m = Raylib.MeasureText(text, 20);
+                CheckLength(m);
                 Raylib.DrawText(text, pos.x, pos.y, 20, Color.BLACK);
                 int drawStartX = pos.x + m + 5;
                 int drawY = pos.y - 24;

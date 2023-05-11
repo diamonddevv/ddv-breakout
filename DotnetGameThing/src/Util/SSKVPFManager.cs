@@ -68,19 +68,29 @@ namespace Breakout.Util
                 d = DeseriInt;
             }
 
+            public override string ToString()
+            {
+                return $"SerializableObject[default:{def},value:{val},serializer:{s},deserializer:{d}]";
+            }
+
             public static string SeriBool(object obj)
             {
                 if (obj is bool)
                 {
-                    return ((bool)obj) ? "true" : "false";
+                    return ((bool)obj).ToString();
                 }
                 else return "null";
             }
             public static object DeseriBool(string deseri)
             {
-                if (deseri.Equals("true")) return true;
-                if (deseri.Equals("false")) return false;
-                throw new Exception($"Setting deserialization failed, read {deseri}");
+                try
+                {
+                    return bool.Parse(deseri);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception($"Setting deserialization failed, read {deseri}");
+                }
             }
 
             public static string SeriInt(object obj)
@@ -122,12 +132,13 @@ namespace Breakout.Util
 
         }
 
-        public void read()
+        public bool read()
         {
+            bool b = PrepareFileManagement(filename);
             StreamReader reader = new StreamReader(filename);
             try
             {
-                if (!PrepareFileManagement(filename))
+                if (!b)
                 {
                     
                     if (reader.EndOfStream)
@@ -143,7 +154,9 @@ namespace Breakout.Util
                         if (dict.ContainsKey(kv[0]))
                         {
                             dict.TryGetValue(kv[0], out var value);
-                            if (value != null) value.val = value.d.Invoke(kv[1]);
+                            if (value != null) {
+                                value.val = value.d.Invoke(kv[1]);
+                            }
                         }
                     }
 
@@ -159,6 +172,8 @@ namespace Breakout.Util
             {
                 reader.Close();
             }
+
+            return b;
         }
 
         private void RevertAll()
@@ -170,7 +185,7 @@ namespace Breakout.Util
         }
 
         public static bool PrepareFileManagement(string filename)
-        {
+        { // returns true if a file was created
 
             string[] parts = filename.Split('\\');
             if (parts.Length > 1)

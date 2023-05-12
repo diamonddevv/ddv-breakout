@@ -11,11 +11,12 @@ namespace Breakout.Window
 {
     internal class HighscoresScreenState : WindowState
     {
-        public HighscoresScreenState() : base("Viewing Highscores")
+        public HighscoresScreenState(WindowState? parent) : base("Viewing Highscores", parent)
         {
         }
 
         public static Button BUTTON_BACK;
+        public static Button BUTTON_RESET;
 
         public override void Init()
         {
@@ -25,6 +26,16 @@ namespace Breakout.Window
             BUTTON_BACK = new Button(20, 20, 128, 96, "Back", 25, () =>
             {
                 Program.RevertToLastState();
+            });
+
+            BUTTON_RESET = new Button(Program.width - 148, 20, 128, 96, "Reset", 25, () =>
+            {
+                Program.SwitchState((parent) => new YesNoWindowState("Are you sure that you want to reset?", () =>
+                {
+                    HighScoreManager.highscoresSave.Reset(false);
+                    HighScoreManager.cachedHighscores.Clear();
+                    Program.RevertToLastState();
+                }, () => Program.RevertToLastState(), parent));
             });
         }
 
@@ -57,7 +68,7 @@ namespace Breakout.Window
                 }
             }
 
-            BUTTON_BACK.Tick();
+            BUTTON_BACK.Tick(); BUTTON_RESET.Tick();
         }
     }
 }

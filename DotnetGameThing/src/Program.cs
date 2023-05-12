@@ -18,8 +18,7 @@ namespace BreakoutGame
 
         public static long startTime;
 
-        private static WindowState? lastState = null;
-        private static WindowState currentState = new TitleMenuState();
+        private static WindowState currentState = new TitleMenuState(null);
 
         static void Main(string[] args)
         {
@@ -51,6 +50,8 @@ namespace BreakoutGame
 
                 width = Raylib.GetScreenWidth();
                 height = Raylib.GetScreenHeight();
+
+                Raylib.SetMasterVolume((float)Settings.GetValue(Settings.KEY_MASTERVOL));
 
                 Raylib.BeginDrawing();
                 currentState.UpdateWindow();
@@ -86,20 +87,19 @@ namespace BreakoutGame
             return (int)DateTimeOffset.Now.ToUnixTimeSeconds();
         }
 
-        public static void SwitchState(WindowState newState)
+        public static void SwitchState(Func<WindowState, WindowState> switcher)
         {
-            lastState = currentState;
-            currentState = newState;
+            currentState = switcher.Invoke(currentState);
         }
 
         public static void RevertToLastState()
         {
-            if (lastState != null)
-            {
-                WindowState tS = currentState;
-                currentState = lastState;
-                lastState = tS;
-            }
+            SwitchState((parent) => parent.parent);
+        }
+
+        public static string GetPreviousWindowStateTitleConcat()
+        {
+            return currentState.parent.titleConcat;
         }
 
         public static void Quit(int code)

@@ -53,21 +53,6 @@ namespace Breakout.Util
                 this.val = this.def;
             }
 
-            public SerializableObj(bool val)
-            {
-                def = val;
-                this.val = val;
-                s = SeriBool;
-                d = DeseriBool;
-            }
-            public SerializableObj(int val)
-            {
-                def = val;
-                this.val = val;
-                s = SeriInt;
-                d = DeseriInt;
-            }
-
             public override string ToString()
             {
                 return $"SerializableObject[default:{def},value:{val},serializer:{s},deserializer:{d}]";
@@ -93,19 +78,19 @@ namespace Breakout.Util
                 }
             }
 
-            public static string SeriInt(object obj)
+            public static string SeriFloat(object obj)
             {
-                if (obj is int)
+                if (obj is float)
                 {
-                    return ((int)obj).ToString();
+                    return ((float)obj).ToString();
                 }
                 else return "null";
             }
-            public static object DeseriInt(string deseri)
+            public static object DeseriFloat(string deseri)
             {
                 try
                 {
-                    return int.Parse(deseri);
+                    return float.Parse(deseri);
                 }
                 catch (Exception e)
                 {

@@ -4,6 +4,7 @@ using Breakout.Resource;
 using BreakoutGame;
 using Raylib_cs;
 using System.Numerics;
+using Breakout.Util;
 
 namespace Breakout.Game
 {
@@ -21,6 +22,8 @@ namespace Breakout.Game
         public int x;
         public int y;
         public Vector2 speed;
+
+        public static int speedV;
 
         public Ball(int x, int y, Vector2 speed, bool bound)
         {
@@ -43,6 +46,8 @@ namespace Breakout.Game
         {
             Move(player, manager, ballManager);
             boundingCircle.TrackBall(this);
+
+            speedV = (int)((float)Settings.GetValue(Settings.KEY_BALLSPEED) * 10);
         }
 
         public void Move(Player player, BlockManager manager, BallManager ballManager)
@@ -67,7 +72,7 @@ namespace Breakout.Game
                     if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
                     {
                         this.bound = false;
-                        this.speed = new Vector2(0, -5);
+                        this.speed = new Vector2(0, -speedV);
                     }
 
                 }
@@ -121,7 +126,7 @@ namespace Breakout.Game
             if (boundingCircle.IntersectsBox(player.boundingBox).test)
             {
                 bool side = boundingCircle.IntersectsBox(player.boundingBox).side;
-                y -= 10;
+                y -= 10 + speedV * (7/4);
                 speed.Y *= -1;
                 speed.X = (x - (player.x + player.width / 2)) / 8;
                 if (side) speed.X *= -1;

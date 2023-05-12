@@ -44,12 +44,7 @@ namespace Breakout.Game
         {
             if (lives <= 0)
             {
-                HighScoreManager.addNewScore("<Insert Name Here>", score);
-                Raylib.PlaySound(ResourceManager.LOSE);
-                GameState.ballManager.balls.Clear();
-                GameState.ballManager.queue.Clear();
-                Array.Clear(GameState.blockManager.blocks);
-                Program.RevertToLastState();
+                GameState.OnLose(this);
             }
         }
 

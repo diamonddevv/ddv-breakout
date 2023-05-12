@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Breakout.Window;
+using BreakoutGame;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +16,7 @@ namespace Breakout.Util
 
         public static List<Scoring> cachedHighscores = new List<Scoring>();
 
-        public static void addNewScore(string name, int score)
+        public static void AddNewScore(string name, int score)
         {
             highscoresSave.addLine($"{name}:{score}");
             highscoresSave.write();

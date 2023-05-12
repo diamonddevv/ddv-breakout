@@ -11,9 +11,11 @@ namespace Breakout.Window
     internal abstract class WindowState
     {
         public string titleConcat;
+        public WindowState? parent;
 
-        public WindowState(string titleConcat) {
+        public WindowState(string titleConcat, WindowState? parent) {
             this.titleConcat = titleConcat;
+            this.parent = parent;
             
             Init();
         }

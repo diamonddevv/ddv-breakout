@@ -1,6 +1,7 @@
 ﻿using Breakout.Decor;
 using Breakout.Game;
 using Breakout.Resource;
+using Breakout.Util;
 using BreakoutGame;
 using Raylib_cs;
 using System;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Breakout.Window
 {
@@ -27,12 +29,16 @@ namespace Breakout.Window
 
         private static bool paused;
 
-        public GameState() : base("In-Game")
+        public static Button BUTTON_INGAME_SETTINGS;
+        public static Button BUTTON_TO_MAIN_MENU;
+
+        public GameState(WindowState? parent) : base("In-Game", parent)
         {
         }
 
         public override void Init()
         {
+            paused = false;
             random = new Random();
 
             this.player = new Player(360, 400);
@@ -42,6 +48,23 @@ namespace Breakout.Window
             blockManager.Generate();
 
             skyPhaseFrames = 0;
+
+            BUTTON_INGAME_SETTINGS = new Button((int)(Program.width * 0.5) - 20 - 128, (int)(Program.height * 0.5) + 116, 128, 96, "Settings", 25, () =>
+            {
+                Program.SwitchState((parent) => new SettingsState(parent));
+            });
+
+
+            BUTTON_TO_MAIN_MENU = new Button((int)(Program.width * 0.5) + 20, (int)(Program.height * 0.5) + 116, 128, 96, "Main Menu", 20, () =>
+            {
+                Program.SwitchState((parent) => new YesNoWindowState("Are you sure you want to go back to the main menu?\nThis game's score will be saved.", () =>
+                {
+                    OnLose(player);
+                }, () =>
+                {
+                    Program.RevertToLastState();
+                }, parent));
+            });
         }
 
         public override void UpdateWindow()
@@ -78,7 +101,7 @@ namespace Breakout.Window
                 }
 
 
-                DecorManager.TickDecor();
+                
 
                 int digits = player.score.ToString().Length;
                 Raylib.DrawText($"{player.score}", (Program.width / 2) - digits * 25, 240, 100, Color.DARKGRAY);
@@ -88,9 +111,13 @@ namespace Breakout.Window
                 player.Tick();
                 ballManager.ForEachBall(b => b.Tick(player, blockManager, ballManager));
 
+                DecorManager.TickDecor();
+
                 player.Draw(debug);
                 ballManager.ForEachBall(b => b.Draw(debug));
                 blockManager.DrawAll(debug);
+
+                
 
                 if (debug)
                 {
@@ -114,6 +141,9 @@ namespace Breakout.Window
                 int m = Raylib.MeasureText("Paused", 25);
                 Raylib.DrawTexture(ResourceManager.PAUSE_OVERLAY, 0, 0, Color.WHITE);
                 Raylib.DrawText("Paused", Program.width / 2 - m / 2, Program.height / 2, 25, Color.WHITE);
+
+                BUTTON_INGAME_SETTINGS.Tick();
+                BUTTON_TO_MAIN_MENU.Tick();
             }
         }
 
@@ -130,6 +160,8 @@ namespace Breakout.Window
             Color.BLACK,                    // night
             new Color(199, 236, 234, 255)   // morning
         };
+
+        public object HighscoreManager { get; private set; }
 
         private void TickSkyColor()
         {
@@ -183,6 +215,19 @@ namespace Breakout.Window
         {
             int Icolor = InvertColorByteSizedInt(CalculateUsefulDarknessByteSizedInt(color));
             return new Color(Icolor, Icolor, Icolor, 255);
+        }
+
+        public static void OnLose(Player player)
+        {
+            GameState.ballManager.balls.Clear();
+            GameState.ballManager.queue.Clear();
+            Array.Clear(GameState.blockManager.blocks);
+
+            Program.SwitchState((parent) => new KeyInputScreen("Enter Name for Highscore:", 16, (s) =>
+            {
+                HighScoreManager.AddNewScore(s, player.score);
+                Program.SwitchState((parent) => new TitleMenuState(parent));
+            }, parent));
         }
     }
 }

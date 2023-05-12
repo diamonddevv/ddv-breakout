@@ -22,19 +22,26 @@ namespace Breakout.Util
             KEY_USEMOUSE = "useMouse",
             KEY_USEEMPTY = "useEmpty",
             KEY_USEBALLBLOCK = "useBallBlock",
-            KEY_MASTERVOL = "masterVol";
+            KEY_MASTERVOL = "masterVol",
+            KEY_BALLSPEED = "ballSpeed";
+            
 
 
         public static readonly (Func<object, string> serialize, Func<string, object> deserialize)
-            SERIAL_BOOL = (SSKVPFManager.SerializableObj.SeriBool, SSKVPFManager.SerializableObj.DeseriBool),
-            SERIAL_INT = (SSKVPFManager.SerializableObj.SeriInt, SSKVPFManager.SerializableObj.DeseriInt);
+            SERIAL_BOOL =   (   SSKVPFManager.SerializableObj.SeriBool,     SSKVPFManager.SerializableObj.DeseriBool    ),
+            SERIAL_FLOAT =  (   SSKVPFManager.SerializableObj.SeriFloat,    SSKVPFManager.SerializableObj.DeseriFloat   );
+
+        public static readonly Func<double, string>
+            DELTAHANDLE_PERCENTAGE  = d => $"{Math.Round(d * 100, 2)}%",
+            DELTAHANDLE_INT         = d => $"{Math.Round(d * 10, 0)}";
 
         public static void Default()
         {
-            Add(new SettingWrapper( KEY_USEMOUSE,       false,  (20, 120),  new BooleanSetting(),   "Use Mouse to Control Paddle:",  SERIAL_BOOL    ));
-            Add(new SettingWrapper( KEY_USEEMPTY,       false,  (20, 150),  new BooleanSetting(),   "Use Empty Blocks:",             SERIAL_BOOL    ));
-            Add(new SettingWrapper( KEY_USEBALLBLOCK,   true,   (20, 180),  new BooleanSetting(),   "Use Ball-Spawner Blocks:",      SERIAL_BOOL    ));
-            Add(new SettingWrapper( KEY_MASTERVOL,      50,     (20, 210),  new IntSetting(),       "Master Volume:",                SERIAL_INT     ));
+            Add(new SettingWrapper( KEY_USEMOUSE,       false,  (20, 120),  new BooleanSetting(),                       "Use Mouse to Control Paddle:",  SERIAL_BOOL    ));
+            Add(new SettingWrapper( KEY_USEEMPTY,       false,  (20, 150),  new BooleanSetting(),                       "Use Empty Blocks:",             SERIAL_BOOL    ));
+            Add(new SettingWrapper( KEY_USEBALLBLOCK,   true,   (20, 180),  new BooleanSetting(),                       "Use Ball-Spawner Blocks:",      SERIAL_BOOL    ));
+            Add(new SettingWrapper( KEY_MASTERVOL,      0.5f,   (20, 210),  new FloatSetting(DELTAHANDLE_PERCENTAGE),   "Master Volume:",                SERIAL_FLOAT   ));
+            Add(new SettingWrapper( KEY_BALLSPEED,      0.5f,  (20, 240),  new FloatSetting(DELTAHANDLE_INT),          "Ball Speed:",                   SERIAL_FLOAT   ));
         }
 
         public static void Add(SettingWrapper wrapper)

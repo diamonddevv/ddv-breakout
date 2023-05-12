@@ -21,7 +21,7 @@ namespace Breakout.Window
         private static Button BUTTON_HIGHSCORES;
         private static Button BUTTON_QUIT;
 
-        public TitleMenuState() : base("Main Menu")
+        public TitleMenuState(WindowState? parent) : base("Main Menu", parent)
         {
         }
 
@@ -29,17 +29,17 @@ namespace Breakout.Window
         {
             BUTTON_PLAY = new Button((int)(Program.width * 0.5) + 20, (int)(Program.height * 0.5), 128, 96, "Play", 25, () =>
             {
-                Program.SwitchState(new GameState());
+                Program.SwitchState((parent) => new GameState(parent));
             });
 
             BUTTON_SETTINGS = new Button((int)(Program.width * 0.5) - 20 - 128, (int)(Program.height * 0.5), 128, 96, "Settings", 25, () =>
             {
-                Program.SwitchState(new SettingsState());
+                Program.SwitchState((parent) => new SettingsState(parent));
             });
 
             BUTTON_HIGHSCORES = new Button((int)(Program.width * 0.5) - 20 - 128, (int)(Program.height * 0.5) + 20 + 96, 128, 96, "Highscores", 19, () =>
             {
-                Program.SwitchState(new HighscoresScreenState());
+                Program.SwitchState((parent) => new HighscoresScreenState(parent));
             });
 
 

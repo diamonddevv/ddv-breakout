@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Breakout.Util.HighScoreManager;
 
 namespace Breakout.Util
 {
@@ -11,11 +12,13 @@ namespace Breakout.Util
         private string filename;
         private string formatVersionId;
         public List<string> lines;
+        private readonly Action<string> fetchFunction;
         private bool wasCorrupt = false;
 
-        public SaveManager(string filename, string formatVersionId) {
+        public SaveManager(string filename, string formatVersionId, Action<string> FetchFunction) {
             this.filename = filename;
             this.formatVersionId = formatVersionId;
+            fetchFunction = FetchFunction;
             this.lines = new List<string>();
         }
 
@@ -85,6 +88,35 @@ namespace Breakout.Util
             return d;
         }
 
+        public void Fetch()
+        {
+            read();
+
+            bool reset = false;
+
+            foreach (var s in highscoresSave.lines)
+            {
+
+                try
+                {
+                    fetchFunction.Invoke(s);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Save file invalid (the format was probably updated) - Exception Details: {e.Message}");
+                    Console.WriteLine("The file will deleted, as it is considered corrupt.");
+                    reset = true;
+                    break;
+                }
+
+            }
+
+            if (reset) Reset(true);
+
+            CollapseDuplicates();
+
+            write();
+        }
 
         public bool ReadWasCorrupted()
         {

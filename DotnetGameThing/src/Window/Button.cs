@@ -1,4 +1,5 @@
 ﻿using Breakout.Resource;
+using BreakoutGame;
 using Raylib_cs;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace Breakout.Window
 
         private void Poll()
         {
-            (int x, int y) mouse = (Raylib.GetMouseX(), Raylib.GetMouseY());
+            (int x, int y) mouse = Program.GetFramebufferMousePos();
 
             if (CalculatePointIntersection(mouse, pos, dim))
             {

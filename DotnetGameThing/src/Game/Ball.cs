@@ -58,8 +58,9 @@ namespace Breakout.Game
                 {
                     if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT))
                     {
-                        this.x = Raylib.GetMouseX();
-                        this.y = Raylib.GetMouseY();
+                        (int x, int y) z = Program.GetFramebufferMousePos();
+
+                        this.x = z.x; this.y = z.y;
                     }
                 }
 

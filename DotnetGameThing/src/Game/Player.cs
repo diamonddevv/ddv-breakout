@@ -68,7 +68,7 @@ namespace Breakout.Game
                 }
             } else
             {
-                x = Raylib.GetMouseX() - width / 2;
+                x = Program.GetFramebufferMousePos().x - width / 2;
             }
 
             (int x, int y) clamped = Program.ClampPositionInsideWindow(x, y, width, height);

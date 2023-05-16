@@ -107,7 +107,7 @@ namespace Breakout.Window
             public override void Poll()
             {
                 int m = Raylib.MeasureText(text, 20);
-                (int x, int y) mouse = (Raylib.GetMouseX(), Raylib.GetMouseY());
+                (int x, int y) mouse = Program.GetFramebufferMousePos();
 
                 var drawPos = UpdateDrawPoint(m);
 
@@ -181,7 +181,7 @@ namespace Breakout.Window
 
             public override void Poll()
             {
-                (int x, int y) mouse = (Raylib.GetMouseX(), Raylib.GetMouseY());
+                (int x, int y) mouse = Program.GetFramebufferMousePos();
 
                 if (Button.CalculatePointIntersection(mouse, pullDrawPos, ((int)Math.Round(pull.width), (int)Math.Round(pull.height))))
                 {

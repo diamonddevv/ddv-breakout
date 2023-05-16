@@ -1,7 +1,9 @@
-﻿using Raylib_cs;
+﻿using BreakoutGame;
+using Raylib_cs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,7 +67,22 @@ namespace Breakout.Resource
             Raylib.UnloadSound(LOSE);
             Raylib.UnloadSound(SELECT_MENU);
         }
-        
 
+
+
+        public static void DrawFromToScaled(Texture2D texture, (int x, int y) a, (int x, int y) b, Color tint)
+        {
+            Raylib.DrawTexturePro(
+                texture, new Rectangle(0, 0, texture.width, -texture.height),
+                new Rectangle(a.x, a.y, b.x, b.y),
+                new Vector2(a.x, a.y),
+                0f, tint
+            );
+        }
+
+        public static void DrawSpreadTexture(Texture2D background, int targetWidth, int targetHeight, Color tint)
+        {
+            DrawFromToScaled(background, (0, 0), (targetWidth, targetHeight), tint);
+        }
     }
 }

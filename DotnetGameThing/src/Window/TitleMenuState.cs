@@ -19,6 +19,7 @@ namespace Breakout.Window
         private static Button BUTTON_PLAY;
         private static Button BUTTON_SETTINGS;
         private static Button BUTTON_HIGHSCORES;
+        private static Button BUTTON_ACHIEVEMENTS;
         private static Button BUTTON_QUIT;
 
         public TitleMenuState(WindowState? parent) : base("Main Menu", parent)
@@ -42,6 +43,10 @@ namespace Breakout.Window
                 Program.SwitchState((parent) => new HighscoresScreenState(parent));
             });
 
+            BUTTON_ACHIEVEMENTS = new Button(20, 20, 128, 96, "Achievements", 16, () =>
+            {
+                Program.SwitchState((parent) => new AchievementsScreenState(parent));
+            });
 
             BUTTON_QUIT = new Button((int)(Program.width * 0.5) + 20, (int)(Program.height * 0.5) + 20 + 96, 128, 96, "Quit", 25, () =>
             {
@@ -63,6 +68,7 @@ namespace Breakout.Window
             BUTTON_PLAY.Tick();
             BUTTON_SETTINGS.Tick();
             BUTTON_HIGHSCORES.Tick();
+            BUTTON_ACHIEVEMENTS.Tick();
             BUTTON_QUIT.Tick();
 
         }

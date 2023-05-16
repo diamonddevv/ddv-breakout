@@ -12,9 +12,19 @@ namespace Breakout.Util
     internal class HighScoreManager
     {
         public static readonly string filename = "data\\highscores.scoremap";
-        public static SaveManager highscoresSave = new SaveManager(filename, "ddvb_SAVE-user:score");
-
         public static List<Scoring> cachedHighscores = new List<Scoring>();
+
+        public static SaveManager highscoresSave = new SaveManager(filename, "ddvb_SAVE-user:score", (line) =>
+        {
+            string[] lineS = line.ToString().Split(':');
+
+            cachedHighscores.Add(new Scoring()
+            {
+                score = int.Parse(lineS[1]),
+                user = lineS[0]
+            });
+        });
+        
 
         public static void AddNewScore(string name, int score)
         {
@@ -35,37 +45,7 @@ namespace Breakout.Util
         public static void Fetch()
         {
             cachedHighscores.Clear();
-            highscoresSave.read();
-
-            bool reset = false;
-
-            foreach (var s in highscoresSave.lines)
-            {
-                string[] line = s.ToString().Split(':');
-
-                try
-                {
-                    cachedHighscores.Add(new Scoring()
-                    {
-                        score = int.Parse(line[1]),
-                        user = line[0]
-                    });
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"Save invalid (the format was probably updated) - Exception Details: {e.Message}");
-                    Console.WriteLine("The save will deleted, as it is considered corrupt.");
-                    reset = true;
-                    break;
-                }
-
-            }
-
-            if (reset) highscoresSave.Reset(true);
-
-            highscoresSave.CollapseDuplicates();
-
-            highscoresSave.write();
+            highscoresSave.Fetch();
         }
 
 

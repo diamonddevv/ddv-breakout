@@ -24,6 +24,8 @@ namespace Breakout.Game
 
         public Physics.BoundingBox boundingBox;
 
+        public static ControllerManager controllerManager = new ControllerManager(0);
+
         public Player(int x, int y) {
             this.x = x;
             this.y = y;
@@ -57,6 +59,12 @@ namespace Breakout.Game
 
             if (!(bool)Settings.settingsSSKVPF.GetObject(Settings.KEY_USEMOUSE))
             {
+                if (controllerManager.IsAvailable())
+                {
+                    x += (int) Math.Round(controllerManager.GetLeftStickX() * 10);
+                }
+
+
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
                 {
                     x -= 5;

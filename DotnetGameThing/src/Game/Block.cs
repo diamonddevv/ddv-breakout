@@ -33,7 +33,7 @@ namespace Breakout.Game
 
             this.color = color;
 
-            this.boundingBox = new Physics.BoundingBox(x, y, width, height);
+            this.boundingBox = this.state != BlockState.Empty ? new Physics.BoundingBox(x, y, width, height) : null;
         }
 
         public void Break(Player player, BallManager ballManager, BlockManager blockManager)

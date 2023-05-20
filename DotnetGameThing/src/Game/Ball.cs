@@ -70,6 +70,12 @@ namespace Breakout.Game
                     this.x = player.x + (player.width / 2);
                     this.y = player.y - 15;
 
+                    if (Player.controllerManager.IsKeyPressed(GamepadButton.GAMEPAD_BUTTON_LEFT_TRIGGER_2))
+                    {
+                        this.bound = false;
+                        this.speed = new Vector2(0, -speedV);
+                    }
+
                     if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
                     {
                         this.bound = false;
@@ -127,7 +133,7 @@ namespace Breakout.Game
             if (boundingCircle.IntersectsBox(player.boundingBox).test)
             {
                 bool side = boundingCircle.IntersectsBox(player.boundingBox).side;
-                y -= 10 + speedV * (7/4);
+                y -= 10 + speedV * (8/3);
                 speed.Y *= -1;
                 speed.X = (x - (player.x + player.width / 2)) / 8;
                 if (side) speed.X *= -1;

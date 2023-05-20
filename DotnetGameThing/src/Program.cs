@@ -56,10 +56,22 @@ namespace BreakoutGame
             RenderTexture2D FRAMEBUFFER = Raylib.LoadRenderTexture(width, height);
             Raylib.SetTextureFilter(FRAMEBUFFER.texture, TextureFilter.TEXTURE_FILTER_TRILINEAR);
 
+
+            // RPC
+            DRPCManager.StartRPC();
+
             while (!Raylib.WindowShouldClose())
             {
                 Raylib.SetWindowTitle(title + " - " + currentState.titleConcat);
-
+                DRPCManager.SetRPC(new DiscordRPC.RichPresence()
+                {
+                    Details = $"Playing {title}",
+                    State = $"{currentState.titleConcat}",
+                    Assets = new DiscordRPC.Assets()
+                    {
+                        LargeImageKey = "icon"
+                    }
+                });
 
                 Raylib.SetMasterVolume((float)Settings.GetValue(Settings.KEY_MASTERVOL));
 
@@ -79,6 +91,7 @@ namespace BreakoutGame
                 Raylib.EndDrawing();
             }
 
+            DRPCManager.StopRPC();
             ResourceManager.UnloadResources();
             Raylib.CloseWindow();
         }
